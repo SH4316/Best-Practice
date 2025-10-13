@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<footer th:fragment="footer" class="site-footer bg-light py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Thymeleaf Best Practices</h5>
+                <p class="text-muted">Spring Boot와 함께 사용하는 Thymeleaf의 올바른 사용법을 학습하기 위한 예제 프로젝트입니다.</p>
+            </div>
+            <div class="col-md-3">
+                <h5>빠른 링크</h5>
+                <ul class="list-unstyled">
+                    <li><a th:href="@{/}" class="text-decoration-none">홈</a></li>
+                    <li><a th:href="@{/variables}" class="text-decoration-none">변수 표현식</a></li>
+                    <li><a th:href="@{/loops}" class="text-decoration-none">반복문</a></li>
+                    <li><a th:href="@{/conditions}" class="text-decoration-none">조건문</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>참고 자료</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://www.thymeleaf.org" class="text-decoration-none" target="_blank">Thymeleaf 공식 문서</a></li>
+                    <li><a href="https://spring.io" class="text-decoration-none" target="_blank">Spring 공식 사이트</a></li>
+                    <li><a href="https://spring.io/guides" class="text-decoration-none" target="_blank">Spring 가이드</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <p class="mb-0 text-muted">&copy; 2023 Thymeleaf Best Practices. All rights reserved.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="text-muted">Made with </span>
+                <i class="bi bi-heart-fill text-danger"></i>
+                <span class="text-muted"> using Spring Boot & Thymeleaf</span>
+            </div>
+        </div>
+    </div>
+</footer>
+</html>

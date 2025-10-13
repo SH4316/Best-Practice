@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Thymeleaf Best Practices</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .example-section {
+            margin-bottom: 3rem;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .badge-best {
+            background-color: #198754;
+        }
+        .badge-bad {
+            background-color: #dc3545;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .nav-link {
+            transition: color 0.2s;
+        }
+        .nav-link:hover {
+            color: #0d6efd !important;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    
+    <main class="container my-5">
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Thymeleaf Best Practices</h1>
+            <p class="lead">Spring Boot와 함께 사용하는 Thymeleaf의 올바른 사용법을 배워보세요</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sticky-top" style="top: 20px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">목차</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <nav class="nav flex-column">
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#variables">변수 표현식</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#loops">반복문</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#conditions">조건문</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#links">링크 처리</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#forms">폼 처리</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#fragments">프래그먼트 재사용</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#i18n">국제화</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#security">보안</a>
+                                <a class="nav-link ps-3 py-2 border-bottom" href="#performance">성능 최적화</a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <section id="variables" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">변수 표현식</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Thymeleaf에서 변수를 안전하고 효과적으로 사용하는 방법을 알아보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/variables}" class="btn btn-outline-primary">
+                                    <i class="bi bi-eye"></i> Good Practice 예제
+                                </a>
+                                <a th:href="@{/comparison/variables}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 변수 표현식 사용 --><br>
+                                            <span th:text="${user.name}">기본 이름</span><br><br>
+                                            
+                                            <!-- 안전한 변수 접근 --><br>
+                                            <span th:text="${user?.name}">기본 이름</span><br><br>
+                                            
+                                            <!-- 유틸리티 객체 사용 --><br>
+                                            <span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}">2023-01-01</span>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 직접 값 출력 --><br>
+                                            <span>[[${user.name}]]</span><br><br>
+                                            
+                                            <!-- null 체크 없이 변수 접근 --><br>
+                                            <span th:text="${user.address.city}"></span><br><br>
+                                            
+                                            <!-- 하드코딩된 값 --><br>
+                                            <span>2023-01-01</span>
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="loops" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h3 class="mb-0">반복문</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">효율적인 반복문 작성과 상태 변수 활용법을 배워보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/loops}" class="btn btn-outline-success">
+                                    <i class="bi bi-eye"></i> Good Practice 예제
+                                </a>
+                                <a th:href="@{/loops/empty}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-eye-slash"></i> 빈 목록 예제
+                                </a>
+                                <a th:href="@{/comparison/loops}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 상태 변수 활용 --><br>
+                                            <tr th:each="user, stat : ${users}"><br>
+                                            &nbsp;&nbsp;<td th:text="${stat.count}">1</td><br>
+                                            &nbsp;&nbsp;<td th:text="${user.name}">이름</td><br>
+                                            &nbsp;&nbsp;<td th:class="${stat.even} ? 'even' : 'odd'"></td><br>
+                                            </tr><br><br>
+                                            
+                                            <!-- 빈 목록 처리 --><br>
+                                            <div th:if="${#lists.isEmpty(users)}"><br>
+                                            &nbsp;&nbsp;사용자가 없습니다.<br>
+                                            </div>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 상태 변수 미활용 --><br>
+                                            <tr th:each="user : ${users}"><br>
+                                            &nbsp;&nbsp;<td th:text="${user.id}">ID</td><br>
+                                            &nbsp;&nbsp;<td th:text="${user.name}">이름</td><br>
+                                            </tr><br><br>
+                                            
+                                            <!-- 빈 목록 처리 없음 --><br>
+                                            <!-- 빈 테이블만 표시됨 -->
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="conditions" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-info text-white">
+                            <h3 class="mb-0">조건문</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">효율적인 조건문 작성과 switch-case 문 활용법을 알아보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/conditions}" class="btn btn-outline-info">
+                                    <i class="bi bi-eye"></i> Good Practice 예제
+                                </a>
+                                <a th:href="@{/comparison/conditions}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- if-unless 조합 --><br>
+                                            <div th:if="${user.active}">활성</div><br>
+                                            <div th:unless="${user.active}">비활성</div><br><br>
+                                            
+                                            <!-- switch-case 문 --><br>
+                                            <div th:switch="${user.role}"><br>
+                                            &nbsp;&nbsp;<span th:case="'ADMIN'">관리자</span><br>
+                                            &nbsp;&nbsp;<span th:case="'USER'">사용자</span><br>
+                                            &nbsp;&nbsp;<span th:case="*">알 수 없음</span><br>
+                                            </div>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 중첩 if 문 --><br>
+                                            <div th:if="${user.active}"><br>
+                                            &nbsp;&nbsp;<div th:if="${user.role == 'ADMIN'}"><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<span>관리자</span><br>
+                                            &nbsp;&nbsp;</div><br>
+                                            </div><br><br>
+                                            
+                                            <!-- 복잡한 조건 --><br>
+                                            <div th:if="${user.active == true and ...}"><br>
+                                            &nbsp;&nbsp;<!-- 복잡한 로직 --><br>
+                                            </div>
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="links" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h3 class="mb-0">링크 처리</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">올바른 URL 처리와 정적 리소스 관리 방법을 배워보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/links}" class="btn btn-outline-warning text-dark">
+                                    <i class="bi bi-eye"></i> Good Practice 예제
+                                </a>
+                                <a th:href="@{/comparison/links}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- URL 링크 처리 --><br>
+                                            <a th:href="@{/users/{id}(id=${user.id})}"><br>
+                                            &nbsp;&nbsp;사용자 정보<br>
+                                            </a><br><br>
+                                            
+                                            <!-- 정적 리소스 --><br>
+                                            <link th:href="@{/css/style.css}"><br>
+                                            <script th:src="@{/js/main.js}"></script>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 하드코딩된 URL --><br>
+                                            <a href="/users/123">사용자 정보</a><br><br>
+                                            
+                                            <!-- 상대 경로 사용 --><br>
+                                            <link rel="stylesheet" href="../css/style.css"><br><br>
+                                            
+                                            <!-- 컨텍스트 경로 미고려 --><br>
+                                            <a href="/app/users">사용자 목록</a>
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="forms" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white">
+                            <h3 class="mb-0">폼 처리</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">안전하고 효율적인 폼 처리와 데이터 바인딩 방법을 알아보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/forms}" class="btn btn-outline-danger">
+                                    <i class="bi bi-eye"></i> Good Practice 예제
+                                </a>
+                                <a th:href="@{/comparison/forms}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <form th:action="@{/users}" th:object="${user}"><br>
+                                            &nbsp;&nbsp;<input type="hidden" th:field="*{id}"><br>
+                                            &nbsp;&nbsp;<input type="text" th:field="*{name}"><br>
+                                            &nbsp;&nbsp;<div th:if="${#fields.hasErrors('name')}"><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<span th:errors="*{name}"></span><br>
+                                            &nbsp;&nbsp;</div><br>
+                                            &nbsp;&nbsp;<button type="submit">저장</button><br>
+                                            </form>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <form action="/users" method="post"><br>
+                                            &nbsp;&nbsp;<input type="text" name="name"><br>
+                                            &nbsp;&nbsp;<input type="email" name="email"><br><br>
+                                            
+                                            &nbsp;&nbsp;<!-- CSRF 토큰 없음 --><br>
+                                            &nbsp;&nbsp;<!-- 유효성 검사 없음 --><br><br>
+                                            
+                                            &nbsp;&nbsp;<button type="submit">저장</button><br>
+                                            </form>
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="fragments" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">
+                            <h3 class="mb-0">프래그먼트 재사용</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">코드 재사용성을 높이는 프래그먼트 활용법을 배워보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/fragments}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-eye"></i> 예제 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 프래그먼트 정의 --><br>
+                                            <header th:fragment="header"></header><br><br>
+                                            
+                                            <!-- 프래그먼트 사용 --><br>
+                                            <header th:replace="~{fragments/header :: header}"></header><br><br>
+                                            
+                                            <!-- 매개변수 전달 --><br>
+                                            <div th:replace="~{fragments/pagination :: pagination(...)}"></div>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 중복된 헤더 코드 --><br>
+                                            <header class="site-header"><br>
+                                            &nbsp;&nbsp;<nav class="navbar"><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<!-- 반복되는 코드 --><br>
+                                            &nbsp;&nbsp;</nav><br>
+                                            </header><br><br>
+                                            
+                                            <!-- 모든 페이지에 복사-붙여넣기 -->
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="i18n" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <h3 class="mb-0">국제화</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">다국어 지원과 메시지 처리 방법을 알아보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/i18n}" class="btn btn-outline-dark">
+                                    <i class="bi bi-eye"></i> 예제 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 메시지 키 사용 --><br>
+                                            <h1 th:text="#{page.title}">페이지 제목</h1><br><br>
+                                            
+                                            <!-- 파라미터화된 메시지 --><br>
+                                            <p th:text="#{welcome.message(${user.name})}"></p><br><br>
+                                            
+                                            <!-- 날짜/숫자 포맷팅 --><br>
+                                            <span th:text="${#dates.format(date, #messages.msg('date.format'))}"></span>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 하드코딩된 텍스트 --><br>
+                                            <h1>사용자 목록</h1><br><br>
+                                            
+                                            <!-- 직접 문자열 결합 --><br>
+                                            <p>안녕하세요, <span th:text="${user.name}">사용자</span>님!</p><br><br>
+                                            
+                                            <!-- 다국어 지원 불가 -->
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="security" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">보안</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">XSS 방지와 권한 체크를 통한 보안 강화 방법을 배워보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/security}" class="btn btn-outline-primary">
+                                    <i class="bi bi-eye"></i> 예제 보기
+                                </a>
+                                <a th:href="@{/comparison/security}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- XSS 방지 --><br>
+                                            <div th:text="${user.comment}">댓글</div><br><br>
+                                            
+                                            <!-- 권한 체크 --><br>
+                                            <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><br>
+                                            &nbsp;&nbsp;<button>삭제</button><br>
+                                            </div><br><br>
+                                            
+                                            <!-- 자동 CSRF 토큰 -->
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- XSS 취약점 --><br>
+                                            <div th:utext="${user.comment}">댓글</div><br><br>
+                                            
+                                            <!-- 권한 체크 없음 --><br>
+                                            <button>삭제</button><br><br>
+                                            
+                                            <!-- CSRF 토큰 없음 -->
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="performance" class="example-section">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h3 class="mb-0">성능 최적화</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">템플릿 성능을 향상시키는 최적화 기법을 알아보세요.</p>
+                            <div class="d-flex gap-2 mb-3">
+                                <a th:href="@{/performance}" class="btn btn-outline-success">
+                                    <i class="bi bi-eye"></i> 예제 보기
+                                </a>
+                                <a th:href="@{/comparison/performance}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left-right"></i> 비교 보기
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 지연 로딩 --><br>
+                                            <div th:with="users=${userService.getActiveUsers()}"><br>
+                                            &nbsp;&nbsp;<!-- 사용 --><br>
+                                            </div><br><br>
+                                            
+                                            <!-- 불필요한 연산 방지 --><br>
+                                            <div th:with="date=${#dates.format(...)}"><br>
+                                            &nbsp;&nbsp;<span th:text="${date}"></span><br>
+                                            &nbsp;&nbsp;<span th:text="${date}"></span><br>
+                                            </div>
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                    <div class="code-block">
+                                        <code>
+                                            <!-- 반복적인 연산 --><br>
+                                            <span th:text="${#dates.format(...)}"></span><br>
+                                            <span th:text="${#dates.format(...)}"></span><br><br>
+                                            
+                                            <!-- 대용량 데이터 전체 로딩 --><br>
+                                            <table><br>
+                                            &nbsp;&nbsp;<tr th:each="user : ${allUsers}"><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<!-- 수천 개의 행 --><br>
+                                            &nbsp;&nbsp;</tr><br>
+                                            </table>
+                                        </code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

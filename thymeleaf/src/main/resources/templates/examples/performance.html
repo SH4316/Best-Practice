@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">성능 최적화 예제</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #198754;
+        }
+        .example-section {
+            margin-bottom: 2rem;
+        }
+        .badge-best {
+            background-color: #198754;
+        }
+        .badge-bad {
+            background-color: #dc3545;
+        }
+        .comparison-col {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .performance-meter {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .performance-bar {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        .performance-good {
+            background-color: #198754;
+        }
+        .performance-bad {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">성능 최적화</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">성능 최적화 예제</h1>
+                <p class="lead">템플릿 성능을 향상시키는 최적화 기법을 알아보세요.</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">페이지 목록</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <nav class="nav flex-column">
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/variables}">변수 표현식</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/loops}">반복문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/conditions}">조건문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/links}">링크 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/forms}">폼 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/security}">보안</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/performance}">성능 최적화</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <section class="example-section">
+                    <h2>불필요한 연산 방지</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><div th:with="date=${#dates.format(user.createdAt, 'yyyy-MM-dd')}"><br>
+                                    &nbsp;&nbsp;<span th:text="${date}">날짜</span><br>
+                                    &nbsp;&nbsp;<span th:text="${date}">날짜</span><br>
+                                    </div></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>좋음</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-good" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></span><br>
+                                    <span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></span></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>나쁨</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-bad" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <div class="alert alert-info">
+                            <h5><i class="bi bi-info-circle"></i> 성능 차이</h5>
+                            <p>th:with를 사용하면 동일한 연산을 한 번만 수행하여 약 2배의 성능 향상을 얻을 수 있습니다.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>지연 로딩</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><div th:with="users=${userService.getActiveUsers()}"><br>
+                                    &nbsp;&nbsp;<table><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<tr th:each="user : ${users}"><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- 내용 --><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;</tr><br>
+                                    &nbsp;&nbsp;</table><br>
+                                    </div></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>좋음</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-good" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 컨트롤러에서 전체 데이터 로딩 --><br>
+                                    <table><br>
+                                    <tr th:each="user : ${allUsers}"><br>
+                                    &nbsp;&nbsp;<!-- 내용 --><br>
+                                    </tr><br>
+                                    </table></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>나쁨</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-bad" style="width: 30%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>대용량 데이터 처리</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 페이징 처리 --><br>
+                                    <tr th:each="user : ${users.content}"><br>
+                                    &nbsp;&nbsp;<!-- 필요한 데이터만 표시 --><br>
+                                    </tr><br><br>
+                                    
+                                    <!-- 페이지네이션 --><br>
+                                    <div th:replace="~{fragments/pagination}"></div></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>좋음</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-good" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 전체 데이터 로딩 --><br>
+                                    <tr th:each="user : ${allUsers}"><br>
+                                    &nbsp;&nbsp;<!-- 수천 개의 행 --><br>
+                                    </tr><br><br>
+                                    
+                                    <!-- 메모리 문제 발생 --></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>나쁨</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-bad" style="width: 20%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>템플릿 캐싱</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code># application.properties<br>
+                                    # 운영 환경<br>
+                                    spring.thymeleaf.cache=true</code>
+                                </div>
+                                <div class="alert alert-success mt-2">
+                                    <i class="bi bi-check-circle"></i> 
+                                    템플릿을 캐싱하여 렌더링 속도를 향상시킵니다.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code># application.properties<br>
+                                    # 운영 환경에서도 캐시 비활성화<br>
+                                    spring.thymeleaf.cache=false</code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-exclamation-triangle"></i> 
+                                    매번 템플릿을 다시 파싱하여 성능이 저하됩니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>불필요한 조건문 제거</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 서버측에서 필터링 --><br>
+                                    <tr th:each="user : ${activeUsers}"><br>
+                                    &nbsp;&nbsp;<!-- 항상 활성 사용자만 표시 --><br>
+                                    </tr></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>좋음</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-good" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 템플릿에서 필터링 --><br>
+                                    <tr th:each="user : ${allUsers}"><br>
+                                    &nbsp;&nbsp;<div th:if="${user.active}"><br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;<!-- 내용 --><br>
+                                    &nbsp;&nbsp;</div><br>
+                                    </tr></code>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>성능</span>
+                                        <small>나쁨</small>
+                                    </div>
+                                    <div class="performance-meter">
+                                        <div class="performance-bar performance-bad" style="width: 50%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>실제 성능 예제</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>사용자 목록 (총 <span th:text="${#lists.size(users)}">100</span>명)</h5>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>이름</th>
+                                            <th>이메일</th>
+                                            <th>역할</th>
+                                            <th>상태</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="user, stat : ${users}" th:if="${stat.count <= 10}">
+                                            <td th:text="${user.id}">ID</td>
+                                            <td th:text="${user.name}">이름</td>
+                                            <td th:text="${user.email}">이메일</td>
+                                            <td>
+                                                <span class="badge bg-primary" th:text="${user.role}">역할</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge" 
+                                                      th:classappend="${user.active} ? 'bg-success' : 'bg-secondary'"
+                                                      th:text="${user.active} ? '활성' : '비활성'">상태</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="alert alert-info mt-3">
+                                <i class="bi bi-info-circle"></i> 
+                                성능을 위해 처음 10개의 항목만 표시합니다. 실제 애플리케이션에서는 페이징을 구현하세요.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="mt-4">
+                    <div class="alert alert-success">
+                        <h5><i class="bi bi-lightbulb"></i> 성능 최적화 핵심 포인트</h5>
+                        <ul>
+                            <li><strong>th:with</strong>를 사용하여 반복적인 연산을 방지하세요</li>
+                            <li><strong>필요한 시점</strong>에 데이터를 로드하여 지연 로딩을 구현하세요</li>
+                            <li><strong>대용량 데이터</strong>는 페이징 처리를 구현하세요</li>
+                            <li><strong>운영 환경</strong>에서는 템플릿 캐싱을 활성화하세요</li>
+                            <li><strong>서버측 필터링</strong>을 통해 불필요한 조건문을 제거하세요</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a th:href="@{/security}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> 이전 예제
+                    </a>
+                    <a th:href="@{/}" class="btn btn-primary">
+                        홈으로 <i class="bi bi-house"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

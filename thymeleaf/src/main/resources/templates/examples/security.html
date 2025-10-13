@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">보안 예제</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #dc3545;
+        }
+        .example-section {
+            margin-bottom: 2rem;
+        }
+        .badge-best {
+            background-color: #198754;
+        }
+        .badge-bad {
+            background-color: #dc3545;
+        }
+        .comparison-col {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .xss-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">보안</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">보안 예제</h1>
+                <p class="lead">XSS 방지와 권한 체크를 통한 보안 강화 방법을 배워보세요.</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">페이지 목록</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <nav class="nav flex-column">
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/variables}">변수 표현식</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/loops}">반복문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/conditions}">조건문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/links}">링크 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/forms}">폼 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/security}">보안</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/performance}">성능 최적화</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <section class="example-section">
+                    <h2>XSS 방지</h2>
+                    <div class="xss-warning">
+                        <h5><i class="bi bi-exclamation-triangle"></i> XSS(Cross-Site Scripting) 경고</h5>
+                        <p>사용자 입력을 그대로 출력하면 악성 스크립트가 실행될 수 있습니다. Thymeleaf는 기본적으로 HTML 이스케이프를 제공합니다.</p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 자동 이스케이프 --><br>
+                                    <div th:text="${user.comment}">댓글</div></code>
+                                </div>
+                                <div class="result-block">
+                                    <strong>결과:</strong>
+                                    <div th:text="${user.comment}" class="border p-2 mt-2">댓글</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- XSS 취약점 --><br>
+                                    <div th:utext="${user.comment}">댓글</div></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-shield-exclamation"></i> 
+                                    <strong>위험:</strong> 악성 스크립트가 실행될 수 있습니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>안전한 HTML 처리</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 허용된 HTML만 처리 --><br>
+                                    <div th:utext="${#strings.escapeXml(user.htmlContent)}"><br>
+                                    &nbsp;&nbsp;HTML 내용<br>
+                                    </div></code>
+                                </div>
+                                <div class="result-block">
+                                    <strong>결과:</strong>
+                                    <div th:utext="${#strings.escapeXml(user.htmlContent)}" class="border p-2 mt-2">HTML 내용</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 무조건 HTML 허용 --><br>
+                                    <div th:utext="${user.htmlContent}"><br>
+                                    &nbsp;&nbsp;HTML 내용<br>
+                                    </div></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-shield-exclamation"></i> 
+                                    <strong>위험:</strong> 모든 HTML 태그와 스크립트가 허용됩니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>권한 체크</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 권한 기반 접근 제어 --><br>
+                                    <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><br>
+                                    &nbsp;&nbsp;<button class="btn btn-danger">삭제</button><br>
+                                    </div></code>
+                                </div>
+                                <div class="result-block">
+                                    <strong>결과:</strong>
+                                    <div class="mt-2">
+                                        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}" class="alert alert-success">
+                                            <i class="bi bi-shield-check"></i> 관리자 권한이 있습니다.
+                                            <button class="btn btn-danger btn-sm ms-2">삭제</button>
+                                        </div>
+                                        <div th:unless="${#authorization.expression('hasRole(''ADMIN'')')}" class="alert alert-warning">
+                                            <i class="bi bi-shield-x"></i> 관리자 권한이 없습니다.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 권한 체크 없음 --><br>
+                                    <button class="btn btn-danger">삭제</button></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-shield-exclamation"></i> 
+                                    <strong>위험:</strong> 모든 사용자가 삭제 버튼을 볼 수 있습니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>CSRF 보호</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><form th:action="@{/users}" method="post"><br>
+                                    &nbsp;&nbsp;<!-- 자동 CSRF 토큰 추가 --><br>
+                                    &nbsp;&nbsp;<input type="text" name="name"><br>
+                                    &nbsp;&nbsp;<button type="submit">제출</button><br>
+                                    </form></code>
+                                </div>
+                                <div class="alert alert-success mt-2">
+                                    <i class="bi bi-shield-check"></i> 
+                                    <strong>안전:</strong> Spring Security가 자동으로 CSRF 토큰을 추가합니다.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><form action="/users" method="post"><br>
+                                    &nbsp;&nbsp;<!-- CSRF 토큰 없음 --><br>
+                                    &nbsp;&nbsp;<input type="text" name="name"><br>
+                                    &nbsp;&nbsp;<button type="submit">제출</button><br>
+                                    </form></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-shield-exclamation"></i> 
+                                    <strong>위험:</strong> CSRF 공격에 취약합니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>입력 값 검증</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 서버측 검증 --><br>
+                                    <input type="text" th:field="*{name}"><br>
+                                    <div th:if="${#fields.hasErrors('name')}"><br>
+                                    &nbsp;&nbsp;<span th:errors="*{name}"></span><br>
+                                    </div></code>
+                                </div>
+                                <div class="alert alert-success mt-2">
+                                    <i class="bi bi-check-circle"></i> 
+                                    <strong>안전:</strong> 서버측 검증으로 무결성 보장
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 클라이언트측 검증만 --><br>
+                                    <input type="text" name="name" required><br>
+                                    <!-- 서버측 검증 없음 --></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-exclamation-triangle"></i> 
+                                    <strong>위험:</strong> 클라이언트측 검증은 우회할 수 있습니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>민감 정보 처리</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 민감 정보 마스킹 --><br>
+                                    <div th:text="${#strings.substring(user.email, 0, 3) + '***'}"><br>
+                                    &nbsp;&nbsp;이메일<br>
+                                    </div></code>
+                                </div>
+                                <div class="result-block">
+                                    <strong>결과:</strong>
+                                    <div class="mt-2">
+                                        <span th:text="${#strings.substring(user.email, 0, 3) + '***'}">이메일</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 민감 정보 전체 노출 --><br>
+                                    <div th:text="${user.email}"><br>
+                                    &nbsp;&nbsp;이메일<br>
+                                    </div></code>
+                                </div>
+                                <div class="alert alert-warning mt-2">
+                                    <i class="bi bi-eye"></i> 
+                                    <strong>주의:</strong> 개인정보가 노출될 수 있습니다.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>콘텐츠 보안 정책 (CSP)</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><!-- 헤더에 CSP 추가 --><br>
+                                    <meta http-equiv="Content-Security-Policy"<br>
+                                    &nbsp;&nbsp;content="default-src 'self'; script-src 'self'"></code>
+                                </div>
+                                <div class="alert alert-success mt-2">
+                                    <i class="bi bi-shield-check"></i> 
+                                    <strong>안전:</strong> 외부 스크립트 실행을 차단합니다.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><!-- CSP 없음 --><br>
+                                    <!-- 모든 스크립트 허용 --></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-shield-exclamation"></i> 
+                                    <strong>위험:</strong> 악성 스크립트가 실행될 수 있습니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="mt-4">
+                    <div class="alert alert-danger">
+                        <h5><i class="bi bi-shield-exclamation"></i> 보안 Best Practice 요약</h5>
+                        <ul>
+                            <li><strong>항상 th:text</strong>를 사용하여 자동 HTML 이스케이프를 적용하세요</li>
+                            <li><strong>th:utext</strong>는 신중하게 사용하고, 반드시 이스케이프 처리를 하세요</li>
+                            <li><strong>권한 체크</strong>를 통해 인가된 사용자만 민감한 기능에 접근하게 하세요</li>
+                            <li><strong>CSRF 토큰</strong>을 사용하여 CSRF 공격을 방지하세요</li>
+                            <li><strong>서버측 검증</strong>을 통해 입력 데이터의 무결성을 보장하세요</li>
+                            <li><strong>민감 정보</strong>는 마스킹 처리하여 노출을 최소화하세요</li>
+                            <li><strong>CSP</strong>를 설정하여 콘텐츠 보안 정책을 적용하세요</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a th:href="@{/forms}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> 이전 예제
+                    </a>
+                    <a th:href="@{/performance}" class="btn btn-primary">
+                        다음 예제 <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">폼 처리 예제</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #dc3545;
+        }
+        .example-section {
+            margin-bottom: 2rem;
+        }
+        .badge-best {
+            background-color: #198754;
+        }
+        .badge-bad {
+            background-color: #dc3545;
+        }
+        .comparison-col {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">폼 처리</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">폼 처리 예제</h1>
+                <p class="lead">안전하고 효율적인 폼 처리와 데이터 바인딩 방법을 알아보세요.</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">페이지 목록</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <nav class="nav flex-column">
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/variables}">변수 표현식</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/loops}">반복문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/conditions}">조건문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/links}">링크 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/forms}">폼 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/security}">보안</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" th:href="@{/performance}">성능 최적화</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <section class="example-section">
+                    <h2>기본 폼 처리</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><form th:action="@{/users}" th:object="${user}" method="post"><br>
+                                    &nbsp;&nbsp;<input type="hidden" th:field="*{id}"><br>
+                                    &nbsp;&nbsp;<input type="text" th:field="*{name}"><br>
+                                    &nbsp;&nbsp;<button type="submit">저장</button><br>
+                                    </form></code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><form action="/users" method="post"><br>
+                                    &nbsp;&nbsp;<input type="text" name="name" value="${user.name}"><br>
+                                    &nbsp;&nbsp;<button type="submit">저장</button><br>
+                                    </form></code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">실제 폼 예제</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <form th:action="@{/forms}" th:object="${user}" method="post">
+                                <input type="hidden" th:field="*{id}">
+                                
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">이름</label>
+                                    <input type="text" class="form-control" 
+                                           id="name" th:field="*{name}" 
+                                           th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                           placeholder="이름을 입력하세요">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
+                                         th:errors="*{name}">이름 오류</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">이메일</label>
+                                    <input type="email" class="form-control" 
+                                           id="email" th:field="*{email}" 
+                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                           placeholder="이메일을 입력하세요">
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                                         th:errors="*{email}">이메일 오류</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="role" class="form-label">역할</label>
+                                    <select class="form-select" id="role" th:field="*{role}">
+                                        <option value="">역할을 선택하세요</option>
+                                        <option value="USER">사용자</option>
+                                        <option value="ADMIN">관리자</option>
+                                        <option value="MANAGER">관리자</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" 
+                                           id="active" th:field="*{active}">
+                                    <label class="form-check-label" for="active">
+                                        활성 상태
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">저장</button>
+                                <a th:href="@{/}" class="btn btn-secondary">취소</a>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>유효성 검사</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><input type="text" th:field="*{name}"><br>
+                                    <div th:if="${#fields.hasErrors('name')}"><br>
+                                    &nbsp;&nbsp;<span th:errors="*{name}"></span><br>
+                                    </div></code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><input type="text" name="name" required><br>
+                                    <!-- 클라이언트측 검증만 --></code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="example-section">
+                    <h2>CSRF 보호</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                <div class="code-block">
+                                    <code><form th:action="@{/users}" method="post"><br>
+                                    &nbsp;&nbsp;<!-- 자동 CSRF 토큰 추가 --><br>
+                                    &nbsp;&nbsp;<!-- 폼 필드 --><br>
+                                    </form></code>
+                                </div>
+                                <div class="alert alert-success mt-2">
+                                    <i class="bi bi-shield-check"></i> 
+                                    Spring Security가 자동으로 CSRF 토큰을 추가합니다.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="comparison-col">
+                                <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                <div class="code-block">
+                                    <code><form action="/users" method="post"><br>
+                                    &nbsp;&nbsp;<!-- CSRF 토큰 없음 --><br>
+                                    </form></code>
+                                </div>
+                                <div class="alert alert-danger mt-2">
+                                    <i class="bi bi-shield-exclamation"></i> 
+                                    CSRF 공격에 취약합니다!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="mt-4">
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Best Practice 요약</h5>
+                        <ul>
+                            <li><strong>th:object와 th:field</strong>를 사용하여 폼 바인딩을 자동화하세요</li>
+                            <li><strong>유효성 검사</strong>를 구현하여 데이터 무결성을 보장하세요</li>
+                            <li><strong>CSRF 토큰</strong>을 사용하여 CSRF 공격을 방지하세요</li>
+                            <li><strong>서버측 검증</strong>을 통해 클라이언트측 검증의 한계를 보완하세요</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <a th:href="@{/links}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> 이전 예제
+                    </a>
+                    <a th:href="@{/security}" class="btn btn-primary">
+                        다음 예제 <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

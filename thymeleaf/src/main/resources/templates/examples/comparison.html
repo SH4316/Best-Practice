@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Best vs Bad Practice 비교</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .example-section {
+            margin-bottom: 2rem;
+        }
+        .badge-best {
+            background-color: #198754;
+        }
+        .badge-bad {
+            background-color: #dc3545;
+        }
+        .comparison-col {
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            height: 100%;
+        }
+        .best-practice {
+            border-left: 4px solid #198754;
+        }
+        .bad-practice {
+            border-left: 4px solid #dc3545;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/header :: header}"></header>
+    
+    <main class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/}">홈</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Best vs Bad Practice 비교</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">Best vs Bad Practice 비교</h1>
+                <p class="lead">Thymeleaf 사용 시 좋은 습관과 나쁜 습관을 비교하여 올바른 사용법을 익혀보세요.</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">주제 선택</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <nav class="nav flex-column nav-pills" id="topic-tabs" role="tablist">
+                            <a class="nav-link active ps-3 py-2 border-bottom" 
+                               id="variables-tab" data-bs-toggle="pill" 
+                               href="#variables" role="tab">변수 표현식</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" 
+                               id="loops-tab" data-bs-toggle="pill" 
+                               href="#loops" role="tab">반복문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" 
+                               id="conditions-tab" data-bs-toggle="pill" 
+                               href="#conditions" role="tab">조건문</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" 
+                               id="links-tab" data-bs-toggle="pill" 
+                               href="#links" role="tab">링크 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" 
+                               id="forms-tab" data-bs-toggle="pill" 
+                               href="#forms" role="tab">폼 처리</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" 
+                               id="security-tab" data-bs-toggle="pill" 
+                               href="#security" role="tab">보안</a>
+                            <a class="nav-link ps-3 py-2 border-bottom" 
+                               id="performance-tab" data-bs-toggle="pill" 
+                               href="#performance" role="tab">성능 최적화</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="tab-content" id="topic-content">
+                    <!-- Variables Tab -->
+                    <div class="tab-pane fade show active" id="variables" role="tabpanel">
+                        <section class="example-section">
+                            <h2>변수 표현식</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>안전한 변수 접근</h6>
+                                        <div class="code-block">
+                                            <code><span th:text="${user?.name}">기본 이름</span></code>
+                                        </div>
+                                        <p class="text-muted">안전한 내비게이션 연산자(?.)를 사용하여 NullPointerException을 방지합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>위험한 변수 접근</h6>
+                                        <div class="code-block">
+                                            <code><span th:text="${user.name}"></span></code>
+                                        </div>
+                                        <p class="text-muted">null 체크 없이 변수에 접근하면 오류가 발생할 수 있습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>유틸리티 객체 활용</h6>
+                                        <div class="code-block">
+                                            <code><span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></span></code>
+                                        </div>
+                                        <p class="text-muted">Thymeleaf 유틸리티 객체를 사용하여 날짜를 포맷팅합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>하드코딩된 포맷</h6>
+                                        <div class="code-block">
+                                            <code><span th:text="${user.createdAt}"></span></code>
+                                        </div>
+                                        <p class="text-muted">포맷되지 않은 날짜를 직접 출력하면 가독성이 떨어집니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <h5><i class="bi bi-lightbulb"></i> 핵심 포인트</h5>
+                                <ul>
+                                    <li>항상 안전한 내비게이션 연산자(?.)를 사용하세요</li>
+                                    <li>Thymeleaf 유틸리티 객체를 적극 활용하세요</li>
+                                    <li>null 값에 대한 기본값을 제공하세요</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Loops Tab -->
+                    <div class="tab-pane fade" id="loops" role="tabpanel">
+                        <section class="example-section">
+                            <h2>반복문</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>상태 변수 활용</h6>
+                                        <div class="code-block">
+                                            <code><tr th:each="user, stat : ${users}"><br>
+                                            &nbsp;&nbsp;<td th:text="${stat.count}">1</td><br>
+                                            &nbsp;&nbsp;<td th:text="${user.name}">이름</td><br>
+                                            </tr></code>
+                                        </div>
+                                        <p class="text-muted">상태 변수를 활용하여 인덱스, 카운트 등 추가 정보를 사용합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>상태 변수 미활용</h6>
+                                        <div class="code-block">
+                                            <code><tr th:each="user : ${users}"><br>
+                                            &nbsp;&nbsp;<td th:text="${user.id}">ID</td><br>
+                                            &nbsp;&nbsp;<td th:text="${user.name}">이름</td><br>
+                                            </tr></code>
+                                        </div>
+                                        <p class="text-muted">상태 변수를 사용하지 않으면 순서, 홀짝 정보를 활용할 수 없습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>빈 목록 처리</h6>
+                                        <div class="code-block">
+                                            <code><div th:if="${#lists.isEmpty(users)}"><br>
+                                            &nbsp;&nbsp;사용자가 없습니다.<br>
+                                            </div><br>
+                                            <table th:unless="${#lists.isEmpty(users)}"><br>
+                                            &nbsp;&nbsp;<!-- 테이블 내용 --><br>
+                                            </table></code>
+                                        </div>
+                                        <p class="text-muted">빈 목록을 처리하여 사용자 경험을 향상시킵니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>빈 목록 처리 없음</h6>
+                                        <div class="code-block">
+                                            <code><table><br>
+                                            <tr th:each="user : ${users}"><br>
+                                            &nbsp;&nbsp;<td th:text="${user.name}"></td><br>
+                                            </tr><br>
+                                            </table></code>
+                                        </div>
+                                        <p class="text-muted">빈 목록일 때 빈 테이블만 표시되어 사용자 경험이 저하됩니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <h5><i class="bi bi-lightbulb"></i> 핵심 포인트</h5>
+                                <ul>
+                                    <li>항상 상태 변수를 활용하여 풍부한 정보를 제공하세요</li>
+                                    <li>빈 목록 처리를 통해 사용자 경험을 향상시키세요</li>
+                                    <li>대용량 데이터는 페이징 처리를 구현하세요</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Conditions Tab -->
+                    <div class="tab-pane fade" id="conditions" role="tabpanel">
+                        <section class="example-section">
+                            <h2>조건문</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>switch-case 문 활용</h6>
+                                        <div class="code-block">
+                                            <code><div th:switch="${user.role}"><br>
+                                            &nbsp;&nbsp;<span th:case="'ADMIN'">관리자</span><br>
+                                            &nbsp;&nbsp;<span th:case="'USER'">사용자</span><br>
+                                            &nbsp;&nbsp;<span th:case="*">알 수 없음</span><br>
+                                            </div></code>
+                                        </div>
+                                        <p class="text-muted">switch-case 문을 사용하여 복잡한 조건을 간결하게 표현합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>중첩 if 문</h6>
+                                        <div class="code-block">
+                                            <code><div th:if="${user.role == 'ADMIN'}"><br>
+                                            &nbsp;&nbsp;<span>관리자</span><br>
+                                            </div><br>
+                                            <div th:if="${user.role == 'USER'}"><br>
+                                            &nbsp;&nbsp;<span>사용자</span><br>
+                                            </div></code>
+                                        </div>
+                                        <p class="text-muted">중복된 조건문은 코드를 복잡하게 만들고 유지보수를 어렵게 합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>삼항 연산자</h6>
+                                        <div class="code-block">
+                                            <code><span th:class="${user.active} ? 'active' : 'inactive'"><br>
+                                            &nbsp;&nbsp;상태<br>
+                                            </span></code>
+                                        </div>
+                                        <p class="text-muted">삼항 연산자를 사용하여 간단한 조건을 간결하게 표현합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>중복된 if 문</h6>
+                                        <div class="code-block">
+                                            <code><div th:if="${user.active}"><br>
+                                            &nbsp;&nbsp;<span class="active">상태</span><br>
+                                            </div><br>
+                                            <div th:unless="${user.active}"><br>
+                                            &nbsp;&nbsp;<span class="inactive">상태</span><br>
+                                            </div></code>
+                                        </div>
+                                        <p class="text-muted">간단한 조건에도 중복된 코드를 사용하면 비효율적입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <h5><i class="bi bi-lightbulb"></i> 핵심 포인트</h5>
+                                <ul>
+                                    <li>switch-case 문을 사용하여 복잡한 조건을 간결하게 표현하세요</li>
+                                    <li>삼항 연산자를 활용하여 간단한 조건을 처리하세요</li>
+                                    <li>if-unless 조합을 적절히 사용하여 코드를 단순화하세요</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Links Tab -->
+                    <div class="tab-pane fade" id="links" role="tabpanel">
+                        <section class="example-section">
+                            <h2>링크 처리</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>URL 표현식 사용</h6>
+                                        <div class="code-block">
+                                            <code><a th:href="@{/users/{id}(id=${user.id})}"><br>
+                                            &nbsp;&nbsp;사용자 정보<br>
+                                            </a></code>
+                                        </div>
+                                        <p class="text-muted">Thymeleaf URL 표현식을 사용하면 컨텍스트 경로를 자동으로 처리합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>하드코딩된 URL</h6>
+                                        <div class="code-block">
+                                            <code><a href="/users/123"><br>
+                                            &nbsp;&nbsp;사용자 정보<br>
+                                            </a></code>
+                                        </div>
+                                        <p class="text-muted">하드코딩된 URL은 컨텍스트 경로 변경 시 문제가 발생합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>정적 리소스 처리</h6>
+                                        <div class="code-block">
+                                            <code><link rel="stylesheet" th:href="@{/css/style.css}"><br>
+                                            <script th:src="@{/js/main.js}"></script></code>
+                                        </div>
+                                        <p class="text-muted">정적 리소스도 URL 표현식을 사용하여 일관성을 유지합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>상대 경로 사용</h6>
+                                        <div class="code-block">
+                                            <code><link rel="stylesheet" href="../css/style.css"><br>
+                                            <script src="../js/main.js"></script></code>
+                                        </div>
+                                        <p class="text-muted">상대 경로는 파일 위치 변경 시 링크가 깨질 수 있습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <h5><i class="bi bi-lightbulb"></i> 핵심 포인트</h5>
+                                <ul>
+                                    <li>항상 URL 표현식(@{...})을 사용하여 동적 URL을 생성하세요</li>
+                                    <li>정적 리소스도 URL 표현식을 사용하여 일관성을 유지하세요</li>
+                                    <li>쿼리 파라미터는 URL 표현식 내에서 처리하세요</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Forms Tab -->
+                    <div class="tab-pane fade" id="forms" role="tabpanel">
+                        <section class="example-section">
+                            <h2>폼 처리</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>th:object와 th:field 사용</h6>
+                                        <div class="code-block">
+                                            <code><form th:action="@{/users}" th:object="${user}" method="post"><br>
+                                            &nbsp;&nbsp;<input type="text" th:field="*{name}"><br>
+                                            &nbsp;&nbsp;<div th:if="${#fields.hasErrors('name')}"><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<span th:errors="*{name}"></span><br>
+                                            &nbsp;&nbsp;</div><br>
+                                            &nbsp;&nbsp;<button type="submit">저장</button><br>
+                                            </form></code>
+                                        </div>
+                                        <p class="text-muted">th:object와 th:field를 사용하면 폼 바인딩과 유효성 검사가 자동화됩니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>수동 폼 처리</h6>
+                                        <div class="code-block">
+                                            <code><form action="/users" method="post"><br>
+                                            &nbsp;&nbsp;<input type="text" name="name" value="${user.name}"><br>
+                                            &nbsp;&nbsp;<!-- 유효성 검사 없음 --><br>
+                                            &nbsp;&nbsp;<!-- CSRF 토큰 없음 --><br>
+                                            &nbsp;&nbsp;<button type="submit">저장</button><br>
+                                            </form></code>
+                                        </div>
+                                        <p class="text-muted">수동 폼 처리는 코드가 길어지고 오류가 발생하기 쉽습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <h5><i class="bi bi-lightbulb"></i> 핵심 포인트</h5>
+                                <ul>
+                                    <li>th:object와 th:field를 사용하여 폼 바인딩을 자동화하세요</li>
+                                    <li>유효성 검사를 구현하여 데이터 무결성을 보장하세요</li>
+                                    <li>Spring Security를 사용하면 CSRF 토큰이 자동으로 추가됩니다</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Security Tab -->
+                    <div class="tab-pane fade" id="security" role="tabpanel">
+                        <section class="example-section">
+                            <h2>보안</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>XSS 방지</h6>
+                                        <div class="code-block">
+                                            <code><div th:text="${user.comment}">댓글</div></code>
+                                        </div>
+                                        <p class="text-muted">th:text를 사용하면 자동으로 HTML 이스케이프가 적용되어 XSS를 방지합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>XSS 취약점</h6>
+                                        <div class="code-block">
+                                            <code><div th:utext="${user.comment}">댓글</div></code>
+                                        </div>
+                                        <p class="text-muted">th:utext를 사용하면 악성 스크립트가 실행될 수 있습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>권한 체크</h6>
+                                        <div class="code-block">
+                                            <code><div th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><br>
+                                            &nbsp;&nbsp;<button>삭제</button><br>
+                                            </div></code>
+                                        </div>
+                                        <p class="text-muted">권한 체크를 통해 인가된 사용자만 민감한 기능에 접근하게 합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>권한 체크 없음</h6>
+                                        <div class="code-block">
+                                            <code><button>삭제</button></code>
+                                        </div>
+                                        <p class="text-muted">권한 체크 없이 민감한 기능을 노출하면 보안 위험이 발생합니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-danger">
+                                <h5><i class="bi bi-shield-exclamation"></i> 보안 핵심 포인트</h5>
+                                <ul>
+                                    <li>항상 th:text를 사용하여 자동 HTML 이스케이프를 적용하세요</li>
+                                    <li>th:utext는 신중하게 사용하고, 반드시 이스케이프 처리를 하세요</li>
+                                    <li>권한 체크를 통해 인가된 사용자만 민감한 기능에 접근하게 하세요</li>
+                                    <li>CSRF 토큰을 사용하여 CSRF 공격을 방지하세요</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Performance Tab -->
+                    <div class="tab-pane fade" id="performance" role="tabpanel">
+                        <section class="example-section">
+                            <h2>성능 최적화</h2>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>불필요한 연산 방지</h6>
+                                        <div class="code-block">
+                                            <code><div th:with="date=${#dates.format(user.createdAt, 'yyyy-MM-dd')}"><br>
+                                            &nbsp;&nbsp;<span th:text="${date}">날짜</span><br>
+                                            &nbsp;&nbsp;<span th:text="${date}">날짜</span><br>
+                                            </div></code>
+                                        </div>
+                                        <p class="text-muted">th:with를 사용하여 반복적인 연산을 한 번만 수행합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>반복적인 연산</h6>
+                                        <div class="code-block">
+                                            <code><span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></span><br>
+                                            <span th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd')}"></span></code>
+                                        </div>
+                                        <p class="text-muted">동일한 연산을 반복하면 성능이 저하됩니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="comparison-col best-practice">
+                                        <h5><span class="badge badge-best">Best Practice ✅</span></h5>
+                                        <h6>지연 로딩</h6>
+                                        <div class="code-block">
+                                            <code><div th:with="users=${userService.getActiveUsers()}"><br>
+                                            &nbsp;&nbsp;<table><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<tr th:each="user : ${users}"><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- 내용 --><br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;</tr><br>
+                                            &nbsp;&nbsp;</table><br>
+                                            </div></code>
+                                        </div>
+                                        <p class="text-muted">필요한 시점에 데이터를 로드하여 불필요한 연산을 방지합니다.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="comparison-col bad-practice">
+                                        <h5><span class="badge badge-bad">Bad Practice ❌</span></h5>
+                                        <h6>대용량 데이터 전체 로딩</h6>
+                                        <div class="code-block">
+                                            <code><table><br>
+                                            <tr th:each="user : ${allUsers}"><br>
+                                            &nbsp;&nbsp;<!-- 수천 개의 행 --><br>
+                                            </tr><br>
+                                            </table></code>
+                                        </div>
+                                        <p class="text-muted">대용량 데이터를 한 번에 로드하면 메모리 문제가 발생할 수 있습니다.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <h5><i class="bi bi-lightbulb"></i> 성능 최적화 핵심 포인트</h5>
+                                <ul>
+                                    <li>th:with를 사용하여 반복적인 연산을 방지하세요</li>
+                                    <li>필요한 시점에 데이터를 로드하여 지연 로딩을 구현하세요</li>
+                                    <li>대용량 데이터는 페이징 처리를 구현하세요</li>
+                                    <li>운영 환경에서는 템플릿 캐싱을 활성화하세요</li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a th:href="@{/}" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left"></i> 홈으로
+                    </a>
+                    <div class="float-end">
+                        <a th:href="@{/variables}" class="btn btn-outline-secondary">
+                            <i class="bi bi-eye"></i> 변수 표현식 예제
+                        </a>
+                        <a th:href="@{/loops}" class="btn btn-outline-secondary">
+                            <i class="bi bi-eye"></i> 반복문 예제
+                        </a>
+                        <a th:href="@{/security}" class="btn btn-outline-secondary">
+                            <i class="bi bi-shield"></i> 보안 예제
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

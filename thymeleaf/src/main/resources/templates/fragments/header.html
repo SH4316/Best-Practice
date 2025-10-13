@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="ko">
+<header th:fragment="header" class="site-header bg-dark text-white">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <i class="bi bi-code-slash"></i> Thymeleaf Best Practices
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">홈</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            예제
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/variables}">변수 표현식</a></li>
+                            <li><a class="dropdown-item" th:href="@{/loops}">반복문</a></li>
+                            <li><a class="dropdown-item" th:href="@{/conditions}">조건문</a></li>
+                            <li><a class="dropdown-item" th:href="@{/links}">링크 처리</a></li>
+                            <li><a class="dropdown-item" th:href="@{/forms}">폼 처리</a></li>
+                            <li><a class="dropdown-item" th:href="@{/fragments}">프래그먼트</a></li>
+                            <li><a class="dropdown-item" th:href="@{/i18n}">국제화</a></li>
+                            <li><a class="dropdown-item" th:href="@{/security}">보안</a></li>
+                            <li><a class="dropdown-item" th:href="@{/performance}">성능 최적화</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/comparison/variables}">비교 예제</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex">
+                    <span class="navbar-text me-3">
+                        <i class="bi bi-github"></i>
+                        <a href="https://github.com" class="text-white text-decoration-none" target="_blank">GitHub</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+</html>
