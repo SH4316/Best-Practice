@@ -132,13 +132,28 @@ import Button from '@/components/common/Button'; // ✅ 좋음
 
 ## 절대 경로 설정
 
-Vite나 Webpack에서 절대 경로를 설정하여 상대 경로의 복잡성을 줄입니다:
+절대 경로(Absolute Path)는 프로젝트 루트에서 시작하는 경로를 사용하여 파일을 import하는 방식입니다. 이를 통해 상대 경로의 복잡성을 줄이고 코드의 가독성을 향상시킬 수 있습니다.
+
+### 절대 경로 사용의 장점
+
+1. **가독성 향상**: `../../../components/Button`과 같은 복잡한 상대 경로 대신 `@components/Button` 사용
+2. **리팩토링 용이성**: 파일 위치가 변경되어도 import 경로 수정 필요 없음
+3. **일관성 유지**: 프로젝트 전체에서 일관된 import 패턴 사용
+4. **IDE 지원**: 대부분의 IDE에서 자동 완성 및 빠른 탐색 지원
+
+### Vite에서 절대 경로 설정
+
+Vite 프로젝트에서 절대 경로를 설정하려면 `vite.config.ts` 파일을 수정해야 합니다:
 
 ```typescript
 // vite.config.ts
-import path from 'path';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
 
+// https://vite.dev/config/
 export default defineConfig({
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -147,8 +162,82 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
     },
   },
+})
+```
+
+### TypeScript 설정
+
+절대 경로를 TypeScript에서 인식하려면 `tsconfig.app.json` 파일에 경로 매핑을 추가해야 합니다:
+
+```json
+{
+  "compilerOptions": {
+    // ... 기존 설정
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@utils/*": ["src/utils/*"]
+    }
+    // ... 나머지 설정
+  },
+  "include": ["src"]
+}
+```
+
+### 사용 예시
+
+절대 경로 설정 후 다음과 같이 import를 사용할 수 있습니다:
+
+```typescript
+// 상대 경로 사용 (이전)
+import Button from '../../../components/common/Button/Button';
+import { useAuth } from '../../../hooks/useAuth';
+import { formatDate } from '../../../utils/helpers';
+
+// 절대 경로 사용 (개선 후)
+import Button from '@components/common/Button';
+import { useAuth } from '@hooks/useAuth';
+import { formatDate } from '@utils/helpers';
+```
+
+### 절대 경로 마이그레이션 방법
+
+기존 프로젝트를 절대 경로로 마이그레이션하는 방법:
+
+1. **설정 추가**: 위에서 설명한 대로 Vite와 TypeScript 설정 추가
+2. **점진적 변환**: 한 파일씩 또는 한 디렉토리씩 절대 경로로 변환
+3. **자동화 도구 사용**: VSCode의 "바꾸기 기능"으로 일괄 변환 가능
+4. **테스트**: 각 변환 후 애플리케이션이 정상적으로 작동하는지 확인
+
+### 추가 경로 별칭 설정
+
+프로젝트가 커질 경우 필요에 따라 추가 경로 별칭을 설정할 수 있습니다:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@utils': path.resolve(__dirname, './src/utils'),
+      // 필요에 따라 추가
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@services': path.resolve(__dirname, './src/services'),
+      '@types': path.resolve(__dirname, './src/types'),
+    },
+  },
 });
 ```
+
+이 경우 `tsconfig.app.json`에도 동일한 경로를 추가해야 합니다.
+
+### 문제 해결
+
+절대 경로 설정 시 발생할 수 있는 문제들과 해결 방법은 [별도의 문서](./path-configuration-troubleshooting.md)에서 자세히 설명합니다.
 
 ## 기능별 구조 (Feature-based Structure)
 
