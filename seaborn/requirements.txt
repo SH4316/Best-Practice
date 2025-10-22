@@ -1,0 +1,18 @@
+# 데이터 시각화 라이브러리
+seaborn>=0.11.0
+matplotlib>=3.3.0
+
+# 데이터 처리 라이브러리
+pandas>=1.2.0
+numpy>=1.20.0
+
+# 통계 및 과학 컴퓨팅
+scipy>=1.6.0
+statsmodels>=0.12.0
+
+# Jupyter 노트북 지원
+jupyter>=1.0.0
+ipykernel>=5.5.0
+
+# 추가 유틸리티
+tqdm>=4.60.0
