@@ -72,6 +72,46 @@
 └── phase6_week18_final_project.md      # 최종 프로젝트
 ```
 
+## 주요 문서 바로가기
+
+### 강의 기본 정보
+- [강의 계획서](course_syllabus.md) - 전체 강의 계획과 목표
+- [평가 및 등급 구조](assessment_grading_structure.md) - 평가 방법과 등급 기준
+- [프로젝트 가이드라인과 평가 기준](project_guidelines_evaluation.md) - 프로젝트 수행 가이드
+- [학습 자료와 참고문헌 목록](reading_lists_resources.md) - 추천 학습 자료
+
+### 1부: 기초 다지기 (1-4주)
+- [1부 실습 과제](phase1_practical_assignments.md)
+- [1주차: 과정 소개 및 LLM 개요](phase1_week1_introduction.md)
+- [2주차: 수학적 기초](phase1_week2_mathematical_foundations.md)
+- [3주차: 머신러닝 기초](phase1_week3_machine_learning_basics.md)
+- [4주차: 딥러닝 기초](phase1_week4_deep_learning_basics.md)
+
+### 2부: 딥러닝 심화와 트랜스포머 (5-8주)
+- [2부 실습 과제](phase2_practical_assignments.md)
+- [5주차: 심화 딥러닝 아키텍처](phase2_week5_advanced_dl_architectures.md)
+- [6주차: 트랜스포머 아키텍처 (1)](phase2_week6_transformer_architecture1.md)
+- [7주차: 트랜스포머 아키텍처 (2)](phase2_week7_transformer_architecture2.md)
+- [8주차: 중간 프로젝트](phase2_week8_midterm_project.md)
+
+### 3부: LLM 훈련과 미세조정 (9-12주)
+- [3부 실습 과제](phase3_practical_assignments.md)
+- [9주차: LLM 훈련 기초](phase3_week9_llm_training_fundamentals.md)
+- [10주차: 사전 훈련 전략](phase3_week10_pretraining_strategies.md)
+- [11주차: 미세조정 방법론](phase3_week11_fine_tuning_methods.md)
+- [12주차: 고급 미세조정 기법](phase4_week12_advanced_fine_tuning.md)
+
+### 4부: LLM 평가와 응용 (13-15주)
+- [4부 실습 과제](phase4_practical_assignments.md)
+- [13주차: LLM 평가 방법론](phase5_week13_llm_evaluation.md)
+- [14주차: LLM 응용 및 시스템 통합](phase5_week14_llm_applications.md)
+- [15주차: 최신 연구 동향과 특수 주제](phase5_week15_llm_ethics_safety.md)
+
+### 5부: 연구 방법론과 프로젝트 (16주)
+- [16주차: 연구 방법론](phase6_week16_research_methodology.md)
+- [석사 논문 개발](phase6_week17_thesis_development.md)
+- [최종 프로젝트](phase6_week18_final_project.md)
+
 ## 평가 방법
 
 - **중간 프로젝트 (25%)**: 간단한 트랜스포머 모델 구현
@@ -121,9 +161,15 @@
    pip install -r requirements.txt
    ```
 
-3. [`course_syllabus.md`](course_syllabus.md)를 참고하여 학습 계획을 세웁니다.
+3. [강의 계획서](course_syllabus.md)를 참고하여 학습 계획을 세웁니다.
 
-4. 주차별 자료를 따라 학습을 진행합니다.
+4. [평가 및 등급 구조](assessment_grading_structure.md)를 확인하여 평가 기준을 이해합니다.
+
+5. [학습 자료와 참고문헌 목록](reading_lists_resources.md)에서 필요한 자료를 확인합니다.
+
+6. 주차별 자료를 따라 학습을 진행합니다:
+   - [1주차: 과정 소개 및 LLM 개요](phase1_week1_introduction.md)부터 시작하세요.
+   - 각 주차의 실습 과제는 해당 파트의 실습 과제 문서를 참고하세요.
 
 ## 기여 방법
 
