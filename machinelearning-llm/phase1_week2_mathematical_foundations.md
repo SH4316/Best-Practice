@@ -21,7 +21,7 @@
   - 내적: $\mathbf{a} \cdot \mathbf{b} = \sum_{i=1}^{n} a_i b_i$
 
 **행렬(Matrix)**
-- 정의: 수치를 직사각형 배열로排列한 것
+- 정의: 수치를 직사각형 배열로 나열한 것
 - 표기법: $\mathbf{A} \in \mathbb{R}^{m \times n}$
 - LLM에서의 의미: 가중치 행렬, 어텐션 가중치
 - 연산:
