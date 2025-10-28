@@ -23,6 +23,10 @@
 **행렬(Matrix)**
 - 정의: 수치를 직사각형 배열로 나열한 것
 - 표기법: $\mathbf{A} \in \mathbb{R}^{m \times n}$
+  - $\mathbf{A}$: 굵은 대문자로 행렬을 표현
+  - $\in$: 속한다 (belongs to)
+  - $\mathbb{R}$: 실수 집합
+  - $m \times n$: $m$개의 행과 $n$개의 열을 가진 행렬
 - LLM에서의 의미: 가중치 행렬, 어텐션 가중치
 - 연산:
   - 곱셈: $(\mathbf{AB})_{ij} = \sum_{k} A_{ik} B_{kj}$
@@ -31,13 +35,17 @@
 #### 고유값 분해와 특이값 분해
 **고유값 분해(Eigenvalue Decomposition)**
 - 정의: $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$
+  - $\mathbf{A}$: 정방 행렬 (square matrix)
+  - $\mathbf{v}$: 고유벡터 (eigenvector), 행렬 $\mathbf{A}$에 의해 방향이 변하지 않는 벡터
+  - $\lambda$: 고유값 (eigenvalue), 고유벡터가 스케일링되는 비율을 나타내는 스칼라
 - 의미: 행렬의 핵심 방향과 스케일링
 - LLM 적용: 주성분 분석, 차원 축소
 
 **특이값 분해(Singular Value Decomposition, SVD)**
 - 정의: $\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$
-  - $\mathbf{U}$: $m \times m$ 직교 행렬 (왼쪽 특이벡터)
-  - $\mathbf{\Sigma}$: $m \times n$ 대각 행렬 (특이값, 내림차순 정렬)
+  - $\mathbf{A}$: $m \times n$ 행렬 (모든 행렬에 대해 가능)
+  - $\mathbf{U}$: $m \times m$ 직교 행렬 (왼쪽 특이벡터), 열들이 서로 직교하고 단위 길이를 가짐
+  - $\mathbf{\Sigma}$: $m \times n$ 대각 행렬 (특이값, 내림차순 정렬), 대각선 성분이 특이값
   - $\mathbf{V}^T$: $n \times n$ 직교 행렬의 전치 (오른쪽 특이벡터)
 - 수학적 의미:
   - 모든 행렬을 직교 행렬과 대각 행렬의 곱으로 분해
@@ -78,6 +86,12 @@
 **경사 하강법(Gradient Descent)**
 - 원리: 기울기의 반대 방향으로 이동하여 최소값 찾기
 - 수식: $\theta_{t+1} = \theta_t - \alpha \nabla f(\theta_t)$
+  - $\theta_t$: 시간 $t$에서의 파라미터 벡터 (모델의 가중치)
+  - $\theta_{t+1}$: 업데이트된 파라미터 벡터
+  - $\alpha$: 학습률 (learning rate), 보통 0과 1 사이의 작은 값
+  - $\nabla f(\theta_t)$: 함수 $f$의 $\theta_t$에서의 기울기 (gradient)
+    - $\nabla$: 기울기 연산자, 함수가 가장 빠르게 증가하는 방향
+    - $f(\theta_t)$: 손실 함수, 최소화하려는 목표 함수
 - LLM 적용: 모델 파라미터 최적화
 
 **고급 최적화 알고리즘**
@@ -108,12 +122,23 @@
 **기댓값(Expected Value)**
 - 정의: 확률 변수의 평균값
 - 이산: $E[X] = \sum_{x} x \cdot P(X=x)$
+  - $E[X]$: 확률 변수 $X$의 기댓값
+  - $\sum_{x}$: 모든 가능한 값 $x$에 대한 합
+  - $x$: 확률 변수가 가질 수 있는 특정 값
+  - $P(X=x)$: 확률 변수 $X$가 값 $x$를 가질 확률
 - 연속: $E[X] = \int_{-\infty}^{\infty} x \cdot f(x) dx$
+  - $\int_{-\infty}^{\infty}$: $-\infty$부터 $\infty$까지의 정적분
+  - $f(x)$: 확률 밀도 함수 (probability density function)
+  - $dx$: $x$에 대한 미소 요소
 - LLM 적용: 손실 함수의 기댓값 최소화
 
 **분산(Variance)**
 - 정의: 확률 변수의 흩어진 정도
 - 수식: $\text{Var}(X) = E[(X - E[X])^2]$
+  - $\text{Var}(X)$: 확률 변수 $X$의 분산
+  - $E[\cdot]$: 기댓값 연산자
+  - $X - E[X]$: 확률 변수에서 평균을 뺀 값 (편차)
+  - $(X - E[X])^2$: 편차의 제곱
 - LLM 적용: 모델 예측의 불확실성 측정
 
 #### 통계적 추론
