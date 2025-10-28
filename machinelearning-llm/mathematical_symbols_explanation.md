@@ -1,6 +1,6 @@
 # 머신러닝 기초 수식 기호 설명
 
-## 1. 선형 회귀 (Linear Regression) {#linear-regression}
+## 1. 선형 회귀 (Linear Regression)
 
 ### 모델: $y = \mathbf{w}^T\mathbf{x} + b$
 
@@ -57,7 +57,7 @@
 - **$\frac{1}{n}$**: 평균을 구하기 위한 정규화 상수
   - 모든 샘플의 평균 제곱 오차(MSE)를 계산
 
-## 2. 다항 회귀 (Polynomial Regression) {#polynomial-regression}
+## 2. 다항 회귀 (Polynomial Regression)
 
 ### 모델: $y = \sum_{i=0}^{d} w_i x^i$
 
@@ -74,7 +74,7 @@
   - $x^1 = x$ (1차항)
   - $x^2$ (2차항), $x^3$ (3차항) 등
 
-## 3. 로지스틱 회귀 (Logistic Regression) {#logistic-regression}
+## 3. 로지스틱 회귀 (Logistic Regression)
 
 ### 모델: $P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T\mathbf{x} + b)$
 
@@ -113,7 +113,7 @@
 - **$\log$**: 자연로그 (natural logarithm)
   - 밑이 $e$인 로그 함수
 
-## 4. 결정 트리 (Decision Trees) {#decision-trees}
+## 4. 결정 트리 (Decision Trees)
 
 ### 정보 이득: $IG = H_{\text{parent}} - \sum_{\text{children}} \frac{N_{\text{child}}}{N_{\text{parent}}} H_{\text{child}}$
 
@@ -150,7 +150,7 @@
 - **$\sum_{i=1}^{C} p_i^2$**: 모든 클래스 비율 제곱의 합
   - 순도를 나타내는 지표
 
-## 5. K-평균 클러스터링 (K-Means Clustering) {#k-means-clustering}
+## 5. K-평균 클러스터링 (K-Means Clustering)
 
 ### 목적 함수: $J = \sum_{i=1}^{k}\sum_{\mathbf{x} \in C_i} \|\mathbf{x} - \boldsymbol{\mu}_i\|^2$
 
@@ -173,7 +173,7 @@
   - 데이터 포인트와 클러스터 중심점 간의 거리
   - $\|\mathbf{v}\|$는 벡터 $\mathbf{v}$의 노름(norm)을 의미
 
-## 6. 정규화 (Regularization) {#regularization}
+## 6. 정규화 (Regularization)
 
 ### L1 정규화: $L = \text{Original Loss} + \lambda\sum_{i}|w_i|$
 
