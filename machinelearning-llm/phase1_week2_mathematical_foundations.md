@@ -36,8 +36,18 @@
 
 **특이값 분해(Singular Value Decomposition, SVD)**
 - 정의: $\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$
-- 의미: 모든 행렬에 적용 가능한 분해
-- LLM 적용: 행렬 근사화, 차원 축소, 잠재 의미 분석
+  - $\mathbf{U}$: $m \times m$ 직교 행렬 (왼쪽 특이벡터)
+  - $\mathbf{\Sigma}$: $m \times n$ 대각 행렬 (특이값, 내림차순 정렬)
+  - $\mathbf{V}^T$: $n \times n$ 직교 행렬의 전치 (오른쪽 특이벡터)
+- 수학적 의미:
+  - 모든 행렬을 직교 행렬과 대각 행렬의 곱으로 분해
+  - 행렬의 핵심 구조와 정보를 특이값으로 표현
+  - 특이값은 행렬의 '중요도'를 나타내는 척도
+- LLM 적용:
+  - 행렬 근사화: 상위 k개 특이값만 사용하여 효율적인 근사화
+  - 차원 축소: 고차원 데이터를 저차원 공간으로 투영
+  - 잠재 의미 분석(LSA): 텍스트 데이터의 숨겨진 의미 구조 발견
+  - 노이즈 제거: 작은 특이값 제거로 노이즈 감소
 
 #### 선형대수의 LLM 적용
 - **단어 임베딩**: 단어를 고차원 벡터 공간에 표현
@@ -154,6 +164,40 @@ print("Vt:\n", Vt)
 # SVD를 이용한 행렬 재구성
 A_reconstructed = U @ np.diag(S) @ Vt
 print("재구성된 행렬:\n", A_reconstructed)
+
+# SVD를 이용한 차원 축소 (상위 k개 특이값만 사용)
+k = 1  # 사용할 특이값의 개수
+U_k = U[:, :k]
+S_k = S[:k]
+Vt_k = Vt[:k, :]
+
+# 근사 행렬 재구성
+A_approx = U_k @ np.diag(S_k) @ Vt_k
+print(f"상위 {k}개 특이값을 사용한 근사 행렬:\n", A_approx)
+
+# 근사 오차 계산
+frobenius_norm = np.linalg.norm(A - A_approx, 'fro')
+print(f"근사 오차 (Frobenius norm): {frobenius_norm:.4f}")
+
+# 특이값의 중요도 시각화
+import matplotlib.pyplot as plt
+plt.figure(figsize=(10, 6))
+plt.plot(S, 'o-')
+plt.title('Singular Values')
+plt.xlabel('Index')
+plt.ylabel('Singular Value')
+plt.grid(True)
+plt.show()
+
+# 누적 설명 분산 비율
+cumulative_variance = np.cumsum(S**2) / np.sum(S**2)
+plt.figure(figsize=(10, 6))
+plt.plot(cumulative_variance, 'o-')
+plt.title('Cumulative Explained Variance Ratio')
+plt.xlabel('Number of Components')
+plt.ylabel('Cumulative Explained Variance')
+plt.grid(True)
+plt.show()
 ```
 
 ### 2. 미적분학적 개념의 코드 구현 (30분)
@@ -309,6 +353,12 @@ print(f"주사위의 표준편차: {np.sqrt(variance)}")
 - 3x3 행렬의 고유값 분해와 특이값 분해 구현
 - SVD를 이용한 이미지 압축 시뮬레이션
 - 단어 임베딩 벡터 간의 코사인 유사도 계산
+
+#### SVD 심화 과제
+- 다양한 k값에 따른 SVD 근사화 성능 비교
+- 특이값 분포를 이용한 데이터의 '효과적 차원' 분석
+- SVD와 PCA의 수학적 관계 증명 및 구현
+- 잠재 의미 분석(LSA)을 이용한 간단한 문서 검색 시스템 구현
 
 ### 2. 미적분학 과제
 - 다양한 활성화 함수(sigmoid, tanh, ReLU)의 도함수 구현

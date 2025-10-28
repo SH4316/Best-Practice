@@ -56,13 +56,13 @@
 - 평가 지표: 평균 제곱 오차(MSE), 평균 절대 오차(MAE), 결정 계수(R²)
 
 **선형 회귀(Linear Regression)**
-- 모델: $y = \mathbf{w}^T\mathbf{x} + b$
-- 손실 함수: $L = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$
+- 모델: [$y = \mathbf{w}^T\mathbf{x} + b$](mathematical_symbols_explanation.md#linear-regression)
+- 손실 함수: [$L = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$](mathematical_symbols_explanation.md#linear-regression)
 - 최적화: 정규 방정식 또는 경사 하강법
 - LLM 적용: 언어 모델의 출력 레이어, 회귀 헤드
 
 **비선형 회귀**
-- 다항 회귀: $y = \sum_{i=0}^{d} w_i x^i$
+- 다항 회귀: [$y = \sum_{i=0}^{d} w_i x^i$](mathematical_symbols_explanation.md#polynomial-regression)
 - 결정 트리 회귀: 트리 구조를 이용한 비선형 모델링
 - 신경망 회귀: 다층 퍼셉트론을 이용한 복잡한 함수 근사
 
@@ -74,15 +74,15 @@
 - 다중 레이블 분류: 하나의 샘플이 여러 클래스에 속할 수 있음
 
 **로지스틱 회귀(Logistic Regression)**
-- 모델: $P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T\mathbf{x} + b)$
-- 시그모이드 함수: $\sigma(z) = \frac{1}{1 + e^{-z}}$
-- 손실 함수: 교차 엔트로피 $L = -\frac{1}{n}\sum_{i=1}^{n}[y_i\log\hat{y}_i + (1-y_i)\log(1-\hat{y}_i)]$
+- 모델: [$P(y=1|\mathbf{x}) = \sigma(\mathbf{w}^T\mathbf{x} + b)$](mathematical_symbols_explanation.md#logistic-regression)
+- 시그모이드 함수: [$\sigma(z) = \frac{1}{1 + e^{-z}}$](mathematical_symbols_explanation.md#logistic-regression)
+- 손실 함수: 교차 엔트로피 [$L = -\frac{1}{n}\sum_{i=1}^{n}[y_i\log\hat{y}_i + (1-y_i)\log(1-\hat{y}_i)]$](mathematical_symbols_explanation.md#logistic-regression)
 - LLM 적용: 다음 단어 예측, 텍스트 분류
 
 **결정 트리(Decision Trees)**
 - 원리: 특성 공간을 재귀적으로 분할
-- 정보 이득: $IG = H_{\text{parent}} - \sum_{\text{children}} \frac{N_{\text{child}}}{N_{\text{parent}}} H_{\text{child}}$
-- 지니 불순도: $G = 1 - \sum_{i=1}^{C} p_i^2$
+- 정보 이득: [$IG = H_{\text{parent}} - \sum_{\text{children}} \frac{N_{\text{child}}}{N_{\text{parent}}} H_{\text{child}}$](mathematical_symbols_explanation.md#decision-trees)
+- 지니 불순도: [$G = 1 - \sum_{i=1}^{C} p_i^2$](mathematical_symbols_explanation.md#decision-trees)
 - 장점: 해석 가능성, 비선형성 처리
 - 단점: 과적합 경향
 
@@ -103,7 +103,7 @@
   2. 각 데이터를 가장 가까운 중심점에 할당
   3. 중심점 재계산
   4. 수렴할 때까지 반복
-- 목적 함수: $J = \sum_{i=1}^{k}\sum_{\mathbf{x} \in C_i} \|\mathbf{x} - \boldsymbol{\mu}_i\|^2$
+- 목적 함수: [$J = \sum_{i=1}^{k}\sum_{\mathbf{x} \in C_i} \|\mathbf{x} - \boldsymbol{\mu}_i\|^2$](mathematical_symbols_explanation.md#k-means-clustering)
 - LLM 적용: 문서 클러스터링, 토픽 모델링
 
 **계층적 클러스터링(Hierarchical Clustering)**
@@ -137,12 +137,12 @@
 
 #### 정규화(Regularization)
 **L1 정규화 (Lasso)**
-- 손실 함수: $L = \text{Original Loss} + \lambda\sum_{i}|w_i|$
+- 손실 함수: [$L = \text{Original Loss} + \lambda\sum_{i}|w_i|$](mathematical_symbols_explanation.md#regularization)
 - 특징: 희소성 유도, 특성 선택
 - LLM 적용: 모델 압축, 중요한 파라미터 식별
 
 **L2 정규화 (Ridge)**
-- 손실 함수: $L = \text{Original Loss} + \lambda\sum_{i}w_i^2$
+- 손실 함수: [$L = \text{Original Loss} + \lambda\sum_{i}w_i^2$](mathematical_symbols_explanation.md#regularization)
 - 특징: 가중치 감쇠, 작은 가중치 선호
 - LLM 적용: 가중치 감쇠, 과적합 방지
 
